@@ -1,0 +1,357 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "./doc-content.css";
+
+/* ═══════════════════════════════════════════════
+   Design System: CSS Custom Properties
+   Strict mapping from DESIGN.md
+   ═══════════════════════════════════════════════ */
+
+:root {
+  /* ── Background & Surface ── */
+  --color-bg: #ffffff;
+  --color-surface: #ffffff;
+  --color-warm-white: #f6f5f4;
+
+  /* ── Text ── */
+  --color-text: rgba(0, 0, 0, 0.95);
+  --color-text-secondary: #615d59;
+  --color-text-muted: #a39e98;
+  --color-text-disabled: #a39e98;
+
+  /* ── Borders ── */
+  --color-border: rgba(0, 0, 0, 0.1);
+  --color-border-strong: rgba(0, 0, 0, 0.15);
+  --color-border-subtle: rgba(0, 0, 0, 0.05);
+
+  /* ── Interactive ── */
+  --color-link: rgba(0, 0, 0, 0.95);
+  --color-link-hover: rgba(0, 0, 0, 0.95);
+  --color-link-light: #62aef0; /* only for dark mode */
+  --color-focus: #000000;
+  --color-focus-ring: rgba(0, 0, 0, 0.08);
+
+  /* ── Semantic Accents ── */
+  --color-success: #1aae39;
+  --color-warning: #dd5b00;
+  --color-error: #e74c3c;
+  --color-info: #31302e;
+  --color-tip: #9b59b6;
+
+  /* ── Badge ── */
+  --color-badge-bg: #f6f5f4;
+  --color-badge-text: #31302e;
+
+  /* ── Code ── */
+  --color-code-inline-bg: #f7f6f3;
+  --color-code-inline-text: #e83e8c;
+  --color-code-inline-border: rgba(0, 0, 0, 0.06);
+  --color-code-block-bg: #f7f6f3;
+  --color-code-block-text: #37352f;
+
+  /* ── Sidebar ── */
+  --color-sidebar-bg: #ffffff;
+  --color-sidebar-hover: rgba(0, 0, 0, 0.03);
+  --color-sidebar-active: rgba(0, 0, 0, 0.04);
+
+  /* ── Navigation ── */
+  --color-nav-bg: rgba(255, 255, 255, 0.95);
+  --color-nav-border: rgba(0, 0, 0, 0.05);
+
+  /* ── Shadows ── */
+  --shadow-card: 0px 4px 18px rgba(0, 0, 0, 0.04),
+    0px 2.025px 7.84688px rgba(0, 0, 0, 0.027),
+    0px 0.8px 2.925px rgba(0, 0, 0, 0.02),
+    0px 0.175px 1.04062px rgba(0, 0, 0, 0.01);
+  --shadow-card-hover: 0px 6px 24px rgba(0, 0, 0, 0.06),
+    0px 3px 10px rgba(0, 0, 0, 0.04),
+    0px 1px 4px rgba(0, 0, 0, 0.03),
+    0px 0.25px 1.5px rgba(0, 0, 0, 0.015);
+  --shadow-deep: 0px 1px 3px rgba(0, 0, 0, 0.01),
+    0px 3px 7px rgba(0, 0, 0, 0.02),
+    0px 7px 15px rgba(0, 0, 0, 0.02),
+    0px 14px 28px rgba(0, 0, 0, 0.04),
+    0px 23px 52px rgba(0, 0, 0, 0.05);
+  --shadow-whisper: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+  --shadow-focus-ring: 0 0 0 3px rgba(9, 127, 232, 0.15);
+
+  /* ── Typography ── */
+  --font-sans: "Inter", -apple-system, system-ui, "Segoe UI", Helvetica,
+    "Apple Color Emoji", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", Menlo, Monaco, Consolas, monospace;
+
+  /* ── Spacing ── */
+  --content-max-width: 680px;
+  --content-wide-max-width: 800px;
+  --sidebar-width: 280px;
+  --toc-width: 240px;
+  --nav-height: 56px;
+
+  /* ── Radius ── */
+  --radius-btn: 4px;
+  --radius-card: 12px;
+  --radius-pill: 9999px;
+  --radius-search: 8px;
+  --radius-code: 4px;
+
+  /* ── Transition ── */
+  --transition-color: 0.3s ease;
+}
+
+/* ═══════════════════════════════════════════════
+   Base Styles
+   ═══════════════════════════════════════════════ */
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "lnum";
+    overflow-x: hidden;
+    overscroll-behavior-x: none;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    transition: color var(--transition-color),
+      background-color var(--transition-color);
+  }
+
+  /* ── Global scrollbar: thin default ── */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.12);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.22);
+  }
+
+  /* Selection color */
+  ::selection {
+    background: rgba(0, 117, 222, 0.15);
+    color: inherit;
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   Floating scrollbar — sidebar & TOC
+   Track always occupies space (no layout shift).
+   Thumb is transparent by default, visible on hover.
+   ═══════════════════════════════════════════════ */
+
+.scrollbar-autohide::-webkit-scrollbar {
+  width: 6px;
+}
+.scrollbar-autohide::-webkit-scrollbar-track {
+  background: transparent;
+}
+/* Default: thumb hidden */
+.scrollbar-autohide::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 4px;
+}
+/* Hover container: thumb appears */
+.scrollbar-autohide:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.45);
+}
+/* Hover thumb itself: darker */
+.scrollbar-autohide:hover::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(156, 163, 175, 0.65);
+}
+
+/* Firefox equivalents */
+.scrollbar-autohide {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+.scrollbar-autohide:hover {
+  scrollbar-color: rgba(156, 163, 175, 0.45) transparent;
+}
+
+/* ═══════════════════════════════════════════════
+   Component Layers
+   ═══════════════════════════════════════════════ */
+
+@layer components {
+  /* Whisper border utility */
+  .whisper-border {
+    border: 1px solid var(--color-border);
+  }
+
+  /* Focus ring utility */
+  .focus-ring {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+    box-shadow: var(--shadow-focus-ring);
+  }
+
+  /* Transition utility for color properties */
+  .transition-colors-theme {
+    transition: color var(--transition-color),
+      background-color var(--transition-color),
+      border-color var(--transition-color);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Search result highlight */
+  mark {
+    background: transparent;
+    color: #18181b;
+    font-weight: 600;
+    border-radius: 2px;
+    padding: 0;
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   Animations
+   ═══════════════════════════════════════════════ */
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    margin-top: -8px;
+  }
+  to {
+    opacity: 1;
+    margin-top: 0;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes bounce {
+  0%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-6px);
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   Search Target Highlight — SPA-compatible
+   Used by useHashHighlight hook (reflow trick)
+   ═══════════════════════════════════════════════ */
+
+@keyframes target-flash {
+  0% { background-color: rgba(228, 228, 231, 0.8); }
+  100% { background-color: transparent; }
+}
+
+.animate-target-flash {
+  animation: target-flash 2s ease-out forwards;
+  border-radius: 4px;
+  scroll-margin-top: 80px;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out;
+}
+
+/* ═══════════════════════════════════════════════
+   Layout: Sidebar + Content + TOC
+   ═══════════════════════════════════════════════ */
+
+/* Desktop: sidebar left, TOC right, content fills middle */
+/* --sidebar-width is set by MainLayout for sidebar collapse animation */
+.layout-main {
+  margin-left: var(--sidebar-width, 280px);
+  margin-right: 300px;
+  transition: margin-left 0.2s ease;
+}
+
+.layout-content {
+  padding: 32px 64px 48px;
+}
+
+/* Wide screens: cap paragraph width only */
+@media (min-width: 1600px) {
+  .doc-content p,
+  .doc-content ul,
+  .doc-content ol {
+    max-width: 800px;
+  }
+}
+
+/* Tablet & mobile: hide sidebar/TOC, full-width content */
+@media (max-width: 1023px) {
+  .layout-sidebar {
+    display: none !important;
+  }
+  .layout-main {
+    margin-left: 0 !important;
+    margin-right: 0;
+  }
+  .layout-content {
+    padding: 68px 20px 80px; /* 68px = 52px top bar + 16px spacing, 80px = 56px bottom bar + 24px spacing */
+    min-width: 0;
+  }
+  /* Header responsive padding */
+  .sticky {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  /* Hide standalone back-to-top button on mobile (now in bottom bar) */
+  .back-to-top-button {
+    display: none !important;
+  }
+  /* Hide AI container on mobile (use /chat page instead) */
+  .ai-container {
+    display: none !important;
+  }
+  /* Footer responsive padding */
+  footer {
+    padding-bottom: 72px !important; /* space for bottom bar */
+  }
+}
+
+/* Hero title — responsive font size */
+.hero-title {
+  font-size: 42px;
+}
+@media (max-width: 1023px) {
+  .hero-title {
+    font-size: 32px;
+  }
+}
+@media (max-width: 640px) {
+  .hero-title {
+    font-size: 28px;
+  }
+}
+
+/* Chat panel — bottom sheet on mobile */
+@media (max-width: 640px) {
+  .ai-container {
+    right: 16px !important;
+    left: 16px !important;
+    bottom: 16px !important;
+    align-items: stretch !important;
+  }
+  .chat-panel {
+    width: 100% !important;
+    height: 80vh !important;
+    max-height: 80vh !important;
+    border-radius: 16px 16px 0 0 !important;
+  }
+}

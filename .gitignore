@@ -1,0 +1,61 @@
+# Dependencies
+node_modules/
+site/node_modules/
+
+# Next.js
+.next/
+site/.next/
+out/
+
+# Build
+*.tsbuildinfo
+
+# Environment - IMPORTANT: Contains API keys
+.env
+.env.local
+.env.*.local
+site/.env
+site/.env.local
+site/.env.*.local
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# User's personal documents (not included in self-host version)
+knowledge-base/
+
+# Docker (user documents)
+docker/docs/*
+!docker/docs/.gitkeep
+!docker/docs/00-快速开始
+!docker/docs/01-Markdown示例
+!docker/docs/02-进阶功能
+
+# Backup
+*.backup
+site/.backup/
+
+# Deployment scripts - contains server info
+update.bat
+update.sh
+deploy.bat
+deploy.sh
+site/update.bat
+site/update.sh
+site/deploy.bat
+site/deploy.sh
+
+# Claude
+.claude/
+
+# Temporary
+*.tmp
+*.temp
+/tmp/
