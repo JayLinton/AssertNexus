@@ -1,4 +1,4 @@
-# Assert Nexus 自托管版
+# Assert Nexus
 
 一个简洁美观的个人知识库文档站，支持 Docker 一键部署。
 
@@ -16,8 +16,8 @@
 ### 1. 克隆项目
 
 ```bash
-git clone https://github.com/your-username/knowledge-base.git
-cd knowledge-base
+git clone https://github.com/JayLinton/AssertNexus.git
+cd AssertNexus
 ```
 
 ### 2. 配置环境变量
@@ -173,15 +173,14 @@ server {
 ## 目录结构
 
 ```
-knowledge-base/
+AssertNexus/
 ├── .env.example              # 环境变量示例
-├── README-selfhost.md        # 自托管说明（本文件）
+├── README.md                 # 说明文档
 ├── docker/
 │   ├── Dockerfile            # Docker 构建文件
 │   ├── docker-compose.yml    # Docker 编排文件
-│   └── docs/                 # 示例文档
-├── site/                     # Next.js 应用源码
-└── knowledge-base/           # 开发用文档目录
+│   └── docs/                 # 文档目录（放你的 .md 文件）
+└── site/                     # Next.js 应用源码
 ```
 
 ## 更新
