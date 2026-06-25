@@ -1,179 +1,203 @@
-# Knowledge Base — 个人知识库文档站
+# Assert Nexus
 
-基于 Next.js 14 的 Markdown 知识库阅读器，支持全文搜索、AI 对话、目录导航。
+一个简洁美观的个人知识库文档站，支持 Docker 一键部署。
+
+## 特性
+
+- 📝 Markdown 文档支持
+- 🔍 全文搜索（支持拼音）
+- 🤖 AI 助手（可选，需配置 DeepSeek API）
+- 📱 移动端适配
+- 🎨 简洁美观的界面
+- 🚀 Docker 一键部署
 
 ## 快速开始
 
-### 1. Clone
+### 1. 克隆项目
 
 ```bash
-git clone <your-repo-url>
-cd knowledge_base
+git clone https://github.com/JayLinton/AssertNexus.git
+cd AssertNexus
 ```
 
-### 2. 准备文档
-
-将你的 Markdown 文件放入 `knowledge-base/` 目录，按文件夹分类：
-
-```
-knowledge-base/
-├── 01-分类名/
-│   ├── 01-文档标题.md
-│   └── 02-另一个文档.md
-├── 02-另一个分类/
-│   └── 01-文档.md
-└── ...
-```
-
-文件夹名前的数字用于排序（如 `01-`、`02-`），渲染时会自动去除。
-
-### 3. 修改配置
-
-编辑 `site/src/site.config.ts`：
-
-```ts
-export const config = {
-  siteName: "你的站点名",
-  siteNameBold: "你的",       // 品牌名前半（粗体）
-  siteNameLight: "站点名",     // 品牌名后半（细体）
-  description: "站点描述",
-  titleTemplate: "%s | 你的站点名",
-  titleDefault: "你的站点名 | 知识库",
-
-  homeLabel: "首页",
-  searchPlaceholder: "搜索文档...",
-  docTreeLabel: "文档目录",
-  footer: "© 2026 你的站点名. All rights reserved.",
-
-  aiName: "AI助手",
-  aiSubtitle: "基于你的站点名为您解答",
-  aiToolbarLabel: "AI 解释",
-  aiFavicon: "/framer.svg",
-
-  logo: "/favicon.png",
-  favicon: "/favicon.png",
-
-  docsDir: "../knowledge-base",  // 文档目录相对于 site/
-};
-```
-
-替换 `site/public/favicon.png` 为你自己的 Logo。
-
-### 4. 配置 AI 功能（可选）
-
-复制环境变量模板并填入 DeepSeek API Key：
+### 2. 配置环境变量
 
 ```bash
-cd site
-cp .env.local.example .env.local
-# 编辑 .env.local，填入 DEEPSEEK_API_KEY=sk-xxx
+cp .env.example .env
 ```
 
-不配置 API Key 不影响其他功能，只是 AI 对话不可用。
-
-### 5. 安装 & 构建
+编辑 `.env` 文件：
 
 ```bash
-cd site
-npm install
-npm run build
+# 站点名称
+SITE_NAME=My Knowledge Base
+
+# 站点描述
+SITE_DESCRIPTION=我的个人知识库
+
+# AI 功能（可选，不填则隐藏 AI 功能）
+AI_API_KEY=sk-your-api-key-here
+AI_MODEL=deepseek-chat
+AI_NAME=Mock
+
+# 端口
+PORT=3000
 ```
 
-### 6. 启动
+### 3. 添加文档
 
-**开发模式：**
-```bash
-npm run dev
-```
-
-**生产模式（PM2）：**
-```bash
-npm install -g pm2
-pm2 start npm --name knowledge-base -- start
-pm2 save
-```
-
-**生产模式（Docker）：**
-```bash
-# 使用 standalone 输出（在 next.config.mjs 中添加 output: 'standalone'）
-docker build -t knowledge-base .
-docker run -p 3000:3000 knowledge-base
-```
-
-## 目录结构
+将你的 Markdown 文档放入 `docker/docs/` 目录：
 
 ```
-knowledge_base/
-├── knowledge-base/          # Markdown 文档（按文件夹分类）
-├── site/                    # Next.js 网站
-│   ├── src/
-│   │   ├── site.config.ts   # ⭐ 站点配置（改这里）
-│   │   ├── app/             # 页面
-│   │   ├── components/      # 组件
-│   │   ├── lib/             # 工具函数
-│   │   └── hooks/           # React Hooks
-│   ├── public/              # 静态资源（favicon、logo）
-│   ├── .env.local           # 环境变量（API Key）
-│   └── package.json
-└── README.md
+docker/docs/
+├── 00-快速开始/
+│   └── 欢迎使用.md
+├── 01-我的文档/
+│   ├── 文档1.md
+│   └── 文档2.md
+└── 02-其他/
+    └── 更多文档.md
 ```
 
-## 部署到服务器
-
-### 方式一：SSH + PM2
+### 4. 启动服务
 
 ```bash
-# 服务器上
-mkdir -p /opt/knowledge-base
-cd /opt/knowledge-base
-
-# 上传 site/ 和 knowledge-base/ 目录
-# 然后：
-cd site
-npm install
-npm run build
-pm2 start npm --name knowledge-base -- start
+cd docker
+docker-compose up -d
 ```
 
-配置 Nginx 反向代理：
+### 5. 访问
+
+打开浏览器访问 http://localhost:3000
+
+## 文档管理
+
+### 文件夹命名
+
+- 格式：`XX-名称`（XX 为两位数字）
+- 数字用于排序，越小越靠前
+- 不带数字前缀的文件夹排在最后
+
+### 文档命名
+
+- 使用 `.md` 扩展名
+- 文件名即为文档标题
+- 支持中文文件名
+
+### 实时更新
+
+- 添加/修改文档后，刷新浏览器即可
+- 无需重启容器
+- 搜索索引自动更新（5 分钟缓存）
+
+## AI 功能配置
+
+### 获取 API Key
+
+1. 访问 [DeepSeek 平台](https://platform.deepseek.com/)
+2. 注册账号并创建 API Key
+3. 将 API Key 填入 `.env` 文件
+
+### 使用方法
+
+- **桌面端**：点击右下角 AI 按钮
+- **移动端**：点击底部导航栏 AI 按钮
+- **划词提问**：选中文本后点击「AI 解释」
+
+## 常用命令
+
+```bash
+# 启动
+docker-compose up -d
+
+# 停止
+docker-compose down
+
+# 查看日志
+docker-compose logs -f
+
+# 重启
+docker-compose restart
+
+# 重新构建（代码更新后）
+docker-compose up -d --build
+```
+
+## 高级配置
+
+### 自定义端口
+
+修改 `.env` 文件：
+
+```bash
+PORT=8080
+```
+
+或启动时指定：
+
+```bash
+PORT=8080 docker-compose up -d
+```
+
+### 使用外部文档目录
+
+如果想使用外部目录（如 NAS 上的文档），修改 `docker-compose.yml`：
+
+```yaml
+volumes:
+  - /path/to/your/docs:/app/docs
+```
+
+### 配置 HTTPS
+
+建议使用 Nginx 反向代理并配置 SSL 证书：
 
 ```nginx
 server {
-    listen 80;
+    listen 443 ssl;
     server_name your-domain.com;
+
+    ssl_certificate /path/to/cert.pem;
+    ssl_certificate_key /path/to/key.pem;
 
     location / {
         proxy_pass http://localhost:3000;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
     }
 }
 ```
 
-### 方式二：使用部署脚本
+## 目录结构
 
-```bash
-# Windows
-cd site
-双击 update.bat
-
-# Linux/Mac
-cd site
-bash update.sh
+```
+AssertNexus/
+├── .env.example              # 环境变量示例
+├── README.md                 # 说明文档
+├── docker/
+│   ├── Dockerfile            # Docker 构建文件
+│   ├── docker-compose.yml    # Docker 编排文件
+│   └── docs/                 # 文档目录（放你的 .md 文件）
+└── site/                     # Next.js 应用源码
 ```
 
-脚本会自动打包、上传、安装依赖、构建、重启 PM2。需要先修改 `update.sh` 中的服务器地址。
+## 更新
 
-## 常见问题
+```bash
+# 拉取最新代码
+git pull
 
-**Q: 如何添加新文档？**
-A: 在 `knowledge-base/` 对应文件夹下创建 `.md` 文件，刷新页面即可。ISR 模式下每 5 分钟自动更新，或重启 PM2 立即生效。
+# 重新构建并启动
+cd docker
+docker-compose up -d --build
+```
 
-**Q: 如何自定义样式？**
-A: 修改 `site/src/app/globals.css`（全局样式）和 `site/src/app/doc-content.css`（文档排版）。
+## 问题反馈
 
-**Q: AI 功能不工作？**
-A: 检查 `site/.env.local` 中 `DEEPSEEK_API_KEY` 是否正确配置。
+如遇到问题，请提交 Issue 到 GitHub 仓库。
 
-**Q: 搜索结果不更新？**
-A: 搜索索引有 5 分钟缓存，重启 PM2 可立即刷新。
+## 许可证
+
+MIT License

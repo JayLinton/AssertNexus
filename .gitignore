@@ -38,6 +38,11 @@ docker/docs/*
 !docker/docs/01-Markdown示例
 !docker/docs/02-进阶功能
 
+# Development docs (not for public repo)
+AGENTS.md
+DESIGN.md
+TODO.md
+
 # Backup
 *.backup
 site/.backup/
